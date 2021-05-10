@@ -25,13 +25,21 @@ if __name__ == '__main__':
     pygame.display.set_caption("Shooting_Game")
     clock = pygame.time.Clock()
 
+    # Load all game graphics
+    background = pygame.image.load(path.join(img_dir, "starfield.png")).convert()
+    background_rect = background.get_rect()
+    player_img = pygame.image.load(path.join(img_dir, "playerShip1_orange.png")).convert()
+    meteor_img = pygame.image.load(path.join(img_dir, "meteorBrown_med1.png")).convert()
+    bullet_img = pygame.image.load(path.join(img_dir, "laserRed16.png")).convert()
+
     # Game object
     class Player(pygame.sprite.Sprite):
         # sprite for the player
         def __init__(self):
             pygame.sprite.Sprite.__init__(self)
-            self.image = pygame.Surface((50, 40))
-            self.image.fill(GREEN)
+            # self.image = pygame.Surface((50, 40))
+            # self.image.fill(GREEN)
+            self.image = pygame.transform.scale(player_img, (50, 38))
             self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
             self.rect.centerx = (WIDTH / 2)
@@ -60,8 +68,9 @@ if __name__ == '__main__':
     class Mob(pygame.sprite.Sprite):
         def __init__(self):
             pygame.sprite.Sprite.__init__(self)
-            self.image = pygame.Surface((30, 40))
-            self.image.fill(RED)
+            # self.image = pygame.Surface((30, 40))
+            self.image = meteor_img
+            self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
             self.rect.x = random.randrange(WIDTH - self.rect.width)
             self.rect.y = random.randrange(-100, -40)
@@ -80,8 +89,11 @@ if __name__ == '__main__':
     class Bullet(pygame.sprite.Sprite):
         def __init__(self, x, y):
             pygame.sprite.Sprite.__init__(self)
-            self.image = pygame.Surface((10, 20))
-            self.image.fill(YELLOW)
+            # self.image = pygame.Surface((10, 20))
+            self.image = bullet_img
+            # self.image.fill(YELLOW)
+            # self.image.fill(BLACK)
+            self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
             self.rect.bottom = y
             self.rect.centerx = x
@@ -134,6 +146,7 @@ if __name__ == '__main__':
 
         # Draw/ Render
         screen.fill(BLACK)
+        screen.blit(background, background_rect)
         all_sprites.draw(screen)
         # draw buffer
         pygame.display.flip()
