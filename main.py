@@ -29,8 +29,13 @@ if __name__ == '__main__':
     background = pygame.image.load(path.join(img_dir, "starfield.png")).convert()
     background_rect = background.get_rect()
     player_img = pygame.image.load(path.join(img_dir, "playerShip1_orange.png")).convert()
-    meteor_img = pygame.image.load(path.join(img_dir, "meteorBrown_med1.png")).convert()
     bullet_img = pygame.image.load(path.join(img_dir, "laserRed16.png")).convert()
+    meteor_images = []
+    meteor_list = ['meteorBrown_big1.png', 'meteorBrown_med1.png', 'meteorBrown_med1.png',
+                   'meteorBrown_med3.png', 'meteorBrown_small1.png', 'meteorBrown_small2.png',
+                   'meteorBrown_tiny1.png']
+    for img in meteor_list:
+        meteor_images.append(pygame.image.load(path.join(img_dir, img)).convert())
 
     # Game object
     class Player(pygame.sprite.Sprite):
@@ -39,6 +44,7 @@ if __name__ == '__main__':
             pygame.sprite.Sprite.__init__(self)
             # self.image = pygame.Surface((50, 40))
             # self.image.fill(GREEN)
+            self.radius = 20
             self.image = pygame.transform.scale(player_img, (50, 38))
             self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
@@ -69,13 +75,16 @@ if __name__ == '__main__':
         def __init__(self):
             pygame.sprite.Sprite.__init__(self)
             # self.image = pygame.Surface((30, 40))
-            self.image = meteor_img
+            self.image_orig = random.choice(meteor_images)
+            self.image_orig.set_colorkey(BLACK)
+            self.image = self.image_orig.copy()
             self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
             self.rect.x = random.randrange(WIDTH - self.rect.width)
             self.rect.y = random.randrange(-100, -40)
             self.speedy = random.randrange(1, 8)
             self.speedx = random.randrange(-3, 3)
+            self.radius = int(self.rect.width * .85 / 2)
 
         def update(self):
             self.rect.x += self.speedx
