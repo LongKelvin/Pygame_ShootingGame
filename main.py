@@ -37,6 +37,9 @@ if __name__ == '__main__':
     for img in meteor_list:
         meteor_images.append(pygame.image.load(path.join(img_dir, img)).convert())
 
+    # font for game
+    font = pygame.font.SysFont(None, 20)
+
     # Game object
     class Player(pygame.sprite.Sprite):
         # sprite for the player
@@ -44,10 +47,12 @@ if __name__ == '__main__':
             pygame.sprite.Sprite.__init__(self)
             # self.image = pygame.Surface((50, 40))
             # self.image.fill(GREEN)
-            self.radius = 20
             self.image = pygame.transform.scale(player_img, (50, 38))
             self.image.set_colorkey(BLACK)
             self.rect = self.image.get_rect()
+            # set radius to improve collision with mob
+            self.radius = 20
+            # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
             self.rect.centerx = (WIDTH / 2)
             self.rect.bottom = (HEIGHT - 10)
             self.speedx = 0
@@ -59,11 +64,17 @@ if __name__ == '__main__':
                 self.speedx = -5
             if keystate[pygame.K_RIGHT]:
                 self.speedx = 5
+            if keystate[pygame.K_w] or keystate[pygame.K_UP]:
+                self.rect.top -= 5
+            if keystate[pygame.K_s] or keystate[pygame.K_DOWN]:
+                self.rect.bottom += 5
             self.rect.x += self.speedx
             if self.rect.right > WIDTH:
                 self.rect.right = WIDTH
             if self.rect.left < 0:
                 self.rect.left = 0
+            if self.rect.bottom > HEIGHT:
+                self.rect.bottom = HEIGHT
 
         def shoot(self):
             bullet = Bullet(self.rect.centerx, self.rect.top)
@@ -85,8 +96,25 @@ if __name__ == '__main__':
             self.speedy = random.randrange(1, 8)
             self.speedx = random.randrange(-3, 3)
             self.radius = int(self.rect.width * .85 / 2)
+            # pygame.draw.circle(self.image, RED, self.rect.center, self.radius)
+            self.rot = 0
+            self.rot_speed = random.randrange(-8, 8)
+            self.last_update = pygame.time.get_ticks()
+
+        def rotate(self):
+            now = pygame.time.get_ticks()
+            if now - self.last_update > 50:
+                self.last_update = now
+                # rotate the mob
+                self.rot = (self.rot + self.rot_speed) % 360
+                new_image = pygame.transform.rotate(self.image_orig, self.rot)
+                old_center = self.rect.center
+                self.image = new_image
+                self.rect = self.image.get_rect()
+                self.rect.center = old_center
 
         def update(self):
+            self.rotate()
             self.rect.x += self.speedx
             self.rect.y += self.speedy
             if self.rect.top > HEIGHT + 10 or self.rect.left < -25 or self.rect.right > WIDTH + 20:
@@ -114,6 +142,25 @@ if __name__ == '__main__':
             if self.rect.bottom < 0:
                 self.kill()
 
+
+    # def draw_text(text, font, color, surface, x, y):
+    #     textobj = font.render(text, 1, color)
+    #     textrect = textobj.get_rect()
+    #     textrect.topleft = (x, y)
+    #     surface.blit(textobj, textrect)
+    #
+    #
+    # def main_menu():
+    #     while True:
+    #         screen.fill(WHITE)
+    #         draw_text("MAIN MENU", font, GREEN, screen, 20, 20)
+    #
+    #         for event in pygame.event.get():
+    #             if event.type == pygame.QUIT:
+    #                 pygame.quit()
+    #             if event.type == pygame.KEYDOWN:
+    #                 if event.key == pygame.K_ESCAPE:
+    #                     pygame.quit()
 
     all_sprites = pygame.sprite.Group()
     mobs = pygame.sprite.Group()
@@ -149,7 +196,8 @@ if __name__ == '__main__':
             mobs.add(m)
 
         # check to see if a mob hit the player
-        hits = pygame.sprite.spritecollide(player, mobs, False)
+        # hits = pygame.sprite.spritecollide(player, mobs, False)
+        hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
         if hits:
             running = False
 
