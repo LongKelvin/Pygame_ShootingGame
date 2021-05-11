@@ -17,7 +17,7 @@ if __name__ == '__main__':
     YELLOW = (255, 255, 0)
     # set up assets folders
     img_dir = path.join(path.dirname(__file__), 'img')
-
+    snd_dir = path.join(path.dirname(__file__), 'snd')
     # init pygame and create window
     pygame.init()
     pygame.mixer.init()
@@ -37,10 +37,18 @@ if __name__ == '__main__':
     for img in meteor_list:
         meteor_images.append(pygame.image.load(path.join(img_dir, img)).convert())
 
+    # Load all game sound and music
+    print(snd_dir)
+    shoot_sound = pygame.mixer.Sound(path.join(snd_dir, 'pew.wav'))
+    expl_sounds = []
+    for snd in ['expl3.wav', 'expl6.wav']:
+        expl_sounds.append(pygame.mixer.Sound(path.join(snd_dir, snd)))
+    pygame.mixer.music.load(path.join(snd_dir, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))
+    pygame.mixer.music.set_volume(0.25)
+
     # font for game
     # font_name = pygame.font.SysFont(None, 20)
     font_name = pygame.font.match_font("arial")
-
 
     # draw text
     def draw_text(surface, text, size, x, y):
@@ -49,7 +57,6 @@ if __name__ == '__main__':
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         surface.blit(text_surface, text_rect)
-
 
     # Game object
     class Player(pygame.sprite.Sprite):
@@ -91,6 +98,7 @@ if __name__ == '__main__':
             bullet = Bullet(self.rect.centerx, self.rect.top)
             all_sprites.add(bullet)
             bullets.add(bullet)
+            shoot_sound.play()
 
 
     class Mob(pygame.sprite.Sprite):
@@ -165,6 +173,7 @@ if __name__ == '__main__':
         mobs.add(m)
 
     score = 0
+    pygame.mixer.music.play(loops=-1)
     # Game loop
     running = True
     while running:
@@ -184,7 +193,8 @@ if __name__ == '__main__':
         # check to see if a bullet hit a mob
         hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
         for hit in hits:
-            score += 50 - hit.radius
+            score += 50
+            random.choice(expl_sounds).play()
             m = Mob()
             all_sprites.add(m)
             mobs.add(m)
