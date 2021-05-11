@@ -38,7 +38,18 @@ if __name__ == '__main__':
         meteor_images.append(pygame.image.load(path.join(img_dir, img)).convert())
 
     # font for game
-    font = pygame.font.SysFont(None, 20)
+    # font_name = pygame.font.SysFont(None, 20)
+    font_name = pygame.font.match_font("arial")
+
+
+    # draw text
+    def draw_text(surface, text, size, x, y):
+        font = pygame.font.Font(font_name, size)
+        text_surface = font.render(text, True, WHITE)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        surface.blit(text_surface, text_rect)
+
 
     # Game object
     class Player(pygame.sprite.Sprite):
@@ -143,25 +154,6 @@ if __name__ == '__main__':
                 self.kill()
 
 
-    # def draw_text(text, font, color, surface, x, y):
-    #     textobj = font.render(text, 1, color)
-    #     textrect = textobj.get_rect()
-    #     textrect.topleft = (x, y)
-    #     surface.blit(textobj, textrect)
-    #
-    #
-    # def main_menu():
-    #     while True:
-    #         screen.fill(WHITE)
-    #         draw_text("MAIN MENU", font, GREEN, screen, 20, 20)
-    #
-    #         for event in pygame.event.get():
-    #             if event.type == pygame.QUIT:
-    #                 pygame.quit()
-    #             if event.type == pygame.KEYDOWN:
-    #                 if event.key == pygame.K_ESCAPE:
-    #                     pygame.quit()
-
     all_sprites = pygame.sprite.Group()
     mobs = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
@@ -172,6 +164,7 @@ if __name__ == '__main__':
         all_sprites.add(m)
         mobs.add(m)
 
+    score = 0
     # Game loop
     running = True
     while running:
@@ -191,6 +184,7 @@ if __name__ == '__main__':
         # check to see if a bullet hit a mob
         hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
         for hit in hits:
+            score += 50 - hit.radius
             m = Mob()
             all_sprites.add(m)
             mobs.add(m)
@@ -205,6 +199,7 @@ if __name__ == '__main__':
         screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
+        draw_text(screen, "Score:  " + str(score), 18, WIDTH / 2, 10)
         # draw buffer
         pygame.display.flip()
 
