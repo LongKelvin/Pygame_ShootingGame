@@ -50,6 +50,7 @@ if __name__ == '__main__':
     # font_name = pygame.font.SysFont(None, 20)
     font_name = pygame.font.match_font("arial")
 
+
     # draw text
     def draw_text(surface, text, size, x, y):
         font = pygame.font.Font(font_name, size)
@@ -57,6 +58,25 @@ if __name__ == '__main__':
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         surface.blit(text_surface, text_rect)
+
+
+    def newmob():
+        m = Mob()
+        all_sprites.add(m)
+        mobs.add(m)
+
+
+    def draw_shield_bar(surface, x, y, percent):
+        if percent < 0:
+            percent = 0
+        BAR_LENGTH = 100
+        BAR_HEIGHT = 10
+        fill = (percent / 100) * BAR_LENGTH
+        outline_rect = pygame.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+        fill_rect = pygame.Rect(x, y, fill, BAR_HEIGHT)
+        pygame.draw.rect(surface, GREEN, fill_rect)
+        pygame.draw.rect(surface, WHITE, outline_rect,2)
+
 
     # Game object
     class Player(pygame.sprite.Sprite):
@@ -74,6 +94,7 @@ if __name__ == '__main__':
             self.rect.centerx = (WIDTH / 2)
             self.rect.bottom = (HEIGHT - 10)
             self.speedx = 0
+            self.shield = 100
 
         def update(self):
             self.speedx = 0
@@ -195,21 +216,23 @@ if __name__ == '__main__':
         for hit in hits:
             score += 50
             random.choice(expl_sounds).play()
-            m = Mob()
-            all_sprites.add(m)
-            mobs.add(m)
+            newmob()
 
         # check to see if a mob hit the player
         # hits = pygame.sprite.spritecollide(player, mobs, False)
-        hits = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
-        if hits:
-            running = False
+        hits = pygame.sprite.spritecollide(player, mobs, True, pygame.sprite.collide_circle)
+        for hit in hits:
+            player.shield -= hit.radius * 2
+            newmob()
+            if player.shield <= 0:
+                running = False
 
         # Draw/ Render
         screen.fill(BLACK)
         screen.blit(background, background_rect)
         all_sprites.draw(screen)
         draw_text(screen, "Score:  " + str(score), 18, WIDTH / 2, 10)
+        draw_shield_bar(screen,5, 5, player.shield)
         # draw buffer
         pygame.display.flip()
 
