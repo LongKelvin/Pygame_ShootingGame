@@ -57,13 +57,14 @@ if __name__ == '__main__':
     expl_sounds = []
     for snd in ['expl3.wav', 'expl6.wav']:
         expl_sounds.append(pygame.mixer.Sound(path.join(snd_dir, snd)))
-        player_die_sound = pygame.mixer.Sound(path.join(snd_dir,'rumble1.ogg'))
+        player_die_sound = pygame.mixer.Sound(path.join(snd_dir, 'rumble1.ogg'))
     pygame.mixer.music.load(path.join(snd_dir, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))
     pygame.mixer.music.set_volume(0.25)
 
     # font for game
     # font_name = pygame.font.SysFont(None, 20)
     font_name = pygame.font.match_font("arial")
+
 
     # draw text
     def draw_text(surface, text, size, x, y):
@@ -97,7 +98,7 @@ if __name__ == '__main__':
             img_rect = image.get_rect()
             img_rect.x = x + 30 * index
             img_rect.y = y
-            surface.blit(image,img_rect)
+            surface.blit(image, img_rect)
 
     # Game object
     class Player(pygame.sprite.Sprite):
@@ -160,7 +161,7 @@ if __name__ == '__main__':
         def hide(self):
             self.hidden = True
             self.hidden_timer = pygame.time.get_ticks()
-            self.rect.center = (WIDTH / 2, HEIGHT-10)
+            self.rect.center = (WIDTH / 2, HEIGHT - 10)
 
 
     class Mob(pygame.sprite.Sprite):
@@ -233,7 +234,7 @@ if __name__ == '__main__':
             self.rect.center = center
             self.frame = 0
             self.last_update = pygame.time.get_ticks()
-            self.frame_rate = 100
+            self.frame_rate = 75
 
         def update(self):
             now = pygame.time.get_ticks()
