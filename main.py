@@ -16,6 +16,10 @@ if __name__ == '__main__':
     GREEN = (0, 255, 0)
     BLUE = (0, 0, 255)
     YELLOW = (255, 255, 0)
+
+    # define global var
+    game_reset = False
+
     # set up assets folders
     img_dir = path.join(path.dirname(__file__), 'img')
     snd_dir = path.join(path.dirname(__file__), 'snd')
@@ -71,6 +75,7 @@ if __name__ == '__main__':
     # font_name = pygame.font.SysFont(None, 20)
     font_name = pygame.font.match_font("arial")
 
+
     # draw text
     def draw_text(surface, text, size, x, y):
         font = pygame.font.Font(font_name, size)
@@ -104,6 +109,44 @@ if __name__ == '__main__':
             img_rect.x = x + 30 * index
             img_rect.y = y
             surface.blit(image, img_rect)
+
+
+    def show_game_over_screen():
+        screen.blit(background, background_rect)
+        draw_text(screen, "GAME OVER!", 64, WIDTH / 2, HEIGHT / 4)
+        draw_text(screen, "Arrow keys moves, Space to fire", 22, WIDTH / 2, HEIGHT / 2)
+        draw_text(screen, "Press any key to start", 18, WIDTH / 2, HEIGHT * (3 / 4))
+        pygame.display.flip()
+        waiting = True
+        while waiting:
+            clock.tick(FPS)
+            for ev in pygame.event.get():
+                if ev.type == pygame.QUIT:
+                    pygame.quit()
+                if ev.type == pygame.KEYUP:
+                    waiting = False
+
+
+    def show_pause_screen():
+        screen.blit(background, background_rect)
+        draw_text(screen, "PAUSE GAME!", 64, WIDTH / 2, HEIGHT / 4)
+        draw_text(screen, "If you want to restart press 'r'", 22, WIDTH / 2, HEIGHT / 2)
+        draw_text(screen, "Or press 'Enter' to resume", 18, WIDTH / 2, HEIGHT * (3 / 4))
+        pygame.display.flip()
+        waiting = True
+        while waiting:
+            clock.tick(FPS)
+            for ev in pygame.event.get():
+                if ev.type == pygame.QUIT:
+                    pygame.quit()
+                if ev.type == pygame.KEYDOWN:
+                    keystate = pygame.key.get_pressed()
+                    if keystate[pygame.K_r]:
+                        game_reset = True
+                        waiting = False
+                    elif keystate[pygame.K_RETURN]:
+                        waiting = False
+
 
     # Game object
     class Player(pygame.sprite.Sprite):
@@ -294,33 +337,47 @@ if __name__ == '__main__':
                     self.rect.center = center
 
 
-    all_sprites = pygame.sprite.Group()
-    mobs = pygame.sprite.Group()
-    bullets = pygame.sprite.Group()
-    player = Player()
-    powerups = pygame.sprite.Group()
-
-    all_sprites.add(player)
-    for i in range(10):
-        m = Mob()
-        all_sprites.add(m)
-        mobs.add(m)
-
-    score = 0
     pygame.mixer.music.play(loops=-1)
     # Game loop
+    game_over = True
     running = True
     while running:
+        if game_over:
+            try:
+                show_game_over_screen()
+                game_over = False
+                all_sprites = pygame.sprite.Group()
+                mobs = pygame.sprite.Group()
+                bullets = pygame.sprite.Group()
+                player = Player()
+                powerups = pygame.sprite.Group()
+
+                all_sprites.add(player)
+                for i in range(10):
+                    m = Mob()
+                    all_sprites.add(m)
+                    mobs.add(m)
+                score = 0
+            except:
+                print("Something went wrong")
+
         # keep loop running at the right speed
         clock.tick(FPS)
+
+        # check is game reset = True then reset game
+        if game_reset == True:
+            game_over = True
         # Process input (event)
         for event in pygame.event.get():
             # check quit game
+            print(event.type)
             if event.type == pygame.QUIT:
                 running = False
-            # elif event.type == pygame.KEYDOWN:
-            #     if event.key == pygame.K_SPACE:
-            #         player.shoot()
+            if event.type == pygame.KEYDOWN:
+                keystate = pygame.key.get_pressed()
+                if keystate[pygame.K_q]:
+                    show_pause_screen()
+
         # Update
         all_sprites.update()
 
@@ -370,7 +427,7 @@ if __name__ == '__main__':
         # if player die and the death_explosion has finish
         if player.lives == 0 and not death_explosion.alive():
             player_die_sound.play()
-            running = False
+            game_over = True
         # Draw/ Render
         screen.fill(BLACK)
         screen.blit(background, background_rect)
