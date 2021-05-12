@@ -1,9 +1,5 @@
-import pygame
-import random
-from settings import *
-
 from Bullet import *
-import GameSound
+import pygame
 
 
 class Player(pygame.sprite.Sprite):
@@ -13,6 +9,7 @@ class Player(pygame.sprite.Sprite):
         self.group = game.all_sprites
         pygame.sprite.Sprite.__init__(self)
         player_img = pygame.image.load(path.join(img_dir, "playerShip1_orange.png")).convert()
+        print(player_img)
         self.image = pygame.transform.scale(player_img, (50, 38))
         self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
@@ -28,7 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.lives = 3
         self.hidden = False
         self.hidden_time = pygame.time.get_ticks()
-        self.power = 1
+        self.power = 2
         self.power_time = pygame.time.get_ticks()
         # print("Player has init complete")
 
@@ -43,6 +40,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.centerx = (WIDTH / 2)
             self.rect.bottom = HEIGHT - 10
         self.speedx = 0
+
         keystate = pygame.key.get_pressed()
         if keystate[pygame.K_LEFT]:
             self.speedx = -5

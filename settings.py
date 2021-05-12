@@ -1,7 +1,5 @@
 # game windows init
-from os import path
 
-import pygame
 from os import path
 
 WIDTH = 800

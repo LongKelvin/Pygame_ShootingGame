@@ -10,6 +10,7 @@ from PowerUp import *
 class Game:
     def __init__(self):
         # init game
+        self.all_sprites = pygame.sprite.Group()
         pygame.init()
         pygame.mixer.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -24,8 +25,8 @@ class Game:
         self.background = pygame.image.load(path.join(img_dir, "starfield.png")).convert()
         self.background_rect = self.background.get_rect()
 
-        player_img = pygame.image.load(path.join(img_dir, "playerShip1_orange.png")).convert()
-        self.player_mini_img = pygame.transform.scale(player_img, (25, 19))
+        self.player_img_mini = pygame.image.load(path.join(img_dir, "playerShip1_orange.png")).convert()
+        self.player_mini_img = pygame.transform.scale(self.player_img_mini, (25, 19))
         self.player_mini_img.set_colorkey(BLACK)
         # load sound and music
         # Load all game sound and music
@@ -58,9 +59,7 @@ class Game:
 
     def new(self):
         # start a new game
-        self.play_background_music(-1)
         self.score = 0
-        self.all_sprites = pygame.sprite.Group()
         self.mobs = pygame.sprite.Group()
         self.powerups = pygame.sprite.Group()
         self.player = Player(self)
@@ -75,13 +74,15 @@ class Game:
 
     def run(self):
         # Game loop
-        # Check background music
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
             self.events()
             self.update()
             self.draw()
+            self.player.update()
+            m = Mob()
+            m.update()
 
     def update(self):
 
@@ -111,7 +112,7 @@ class Game:
             expl = Explosion(hit.rect.center, 'sm')
             self.all_sprites.add(expl)
             self.newmob()
-            self.player_hit_sound.play()
+            print(hit)
 
             if self.player.shield <= 0:
                 death_explosion = Explosion(hit.rect.center, 'player')

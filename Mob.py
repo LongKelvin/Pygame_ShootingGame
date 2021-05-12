@@ -1,7 +1,7 @@
 
 import random
 from settings import *
-
+import pygame
 
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
