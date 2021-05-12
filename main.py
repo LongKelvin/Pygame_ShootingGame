@@ -75,7 +75,6 @@ if __name__ == '__main__':
     # font_name = pygame.font.SysFont(None, 20)
     font_name = pygame.font.match_font("arial")
 
-
     # draw text
     def draw_text(surface, text, size, x, y):
         font = pygame.font.Font(font_name, size)
@@ -365,8 +364,8 @@ if __name__ == '__main__':
         clock.tick(FPS)
 
         # check is game reset = True then reset game
-        if game_reset == True:
-            game_over = True
+        # if game_reset == True:
+        #     game_over = True
         # Process input (event)
         for event in pygame.event.get():
             # check quit game
