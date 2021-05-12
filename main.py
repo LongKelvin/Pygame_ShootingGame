@@ -55,6 +55,12 @@ class Game:
         self.powerups = pygame.sprite.Group()
         self.player = Player(self)
         self.bullets = pygame.sprite.Group()
+        self.all_sprites.add(self.player)
+        for i in range(10):
+            m = Mob()
+            self.all_sprites.add(m)
+            self.mobs.add(m)
+
         self.run()
 
     def run(self):
