@@ -26,7 +26,7 @@ class Mob(pygame.sprite.Sprite):
         self.rot = 0
         self.rot_speed = random.randrange(-8, 8)
         self.last_update = pygame.time.get_ticks()
-        print("Mob has init complete")
+        # print("Mob has init complete")
 
     def rotate(self):
         now = pygame.time.get_ticks()

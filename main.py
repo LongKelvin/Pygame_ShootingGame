@@ -36,19 +36,29 @@ class Game:
         self.player_die_sound = pygame.mixer.Sound(path.join(snd_dir, 'rumble1.ogg'))
         self.powerup_shield_sound = pygame.mixer.Sound(path.join(snd_dir, 'pow5.wav'))
         self.powerup_gun_sound = pygame.mixer.Sound(path.join(snd_dir, 'pow4.wav'))
+        # pygame.mixer.music.load(path.join(snd_dir, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))
+        # pygame.mixer.music.set_volume(0.25)
+        # pygame.mixer.music.play(loops=-1)
+        self.player_hit_sound = pygame.mixer.Sound(path.join(snd_dir, 'hitmob.wav'))
 
     def newmob(self):
         m = Mob()
         self.all_sprites.add(m)
         self.mobs.add(m)
 
-    def play_background_music(self, loop=-1, volume=0.25):
-        pygame.mixer.music.load(path.join(snd_dir, 'tgfcoder-FrozenJam-SeamlessLoop.ogg'))
+    def play_background_music(self, loop=-1, volume=0.5):
+        pygame.mixer.music.load(path.join(snd_dir, 'background.wav'))
         pygame.mixer.music.set_volume(volume)
         pygame.mixer.music.play(loop)
 
+    def play_intro_music(self):
+        pygame.mixer.music.load(path.join(snd_dir, 'game_start_music.mp3'))
+        pygame.mixer.music.set_volume(0.4)
+        pygame.mixer.music.play(-1)
+
     def new(self):
         # start a new game
+        self.play_background_music(-1)
         self.score = 0
         self.all_sprites = pygame.sprite.Group()
         self.mobs = pygame.sprite.Group()
@@ -65,7 +75,7 @@ class Game:
 
     def run(self):
         # Game loop
-        print("Game running")
+        # Check background music
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
@@ -74,8 +84,9 @@ class Game:
             self.draw()
 
     def update(self):
-        print("Game in update")
+
         # Game loop sprites update
+        global death_explosion
         self.all_sprites.update()
         # hit mob ...
         # check to see if a bullet hit a mob
@@ -100,6 +111,7 @@ class Game:
             expl = Explosion(hit.rect.center, 'sm')
             self.all_sprites.add(expl)
             self.newmob()
+            self.player_hit_sound.play()
 
             if self.player.shield <= 0:
                 death_explosion = Explosion(hit.rect.center, 'player')
@@ -163,10 +175,10 @@ class Game:
 
     def show_start_screen(self):
         # game splash/start screen
-        self.play_background_music(-1)
+        self.play_intro_music()
         self.screen.fill(BLACK)
         self.draw_text(GAME_TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
-        self.draw_text("Arrows to move, Space to jump", 22, WHITE, WIDTH / 2, HEIGHT / 2)
+        self.draw_text("Arrows to move, Space to fire", 22, WHITE, WIDTH / 2, HEIGHT / 2)
         self.draw_text("Press a key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
         # self.draw_text("High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, 15)
         pygame.display.flip()
@@ -175,9 +187,10 @@ class Game:
 
     def show_go_screen(self):
         # game over/continue
+        pygame.mixer.music.stop()
+        self.play_intro_music()
         if not self.running:
             return
-        self.play_background_music()
         self.screen.fill(BLACK)
         self.draw_text("GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
         self.draw_text("Score: " + str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2)

@@ -15,7 +15,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.bottom = y
         self.rect.centerx = x
         self.speedy = -10
-        print("Bullet has init complete")
+        # print("Bullet has init complete")
 
     def update(self):
         self.rect.y += self.speedy

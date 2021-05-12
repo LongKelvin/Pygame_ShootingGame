@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         self.hidden_time = pygame.time.get_ticks()
         self.power = 1
         self.power_time = pygame.time.get_ticks()
-        print("Player has init complete")
+        # print("Player has init complete")
 
     def update(self):
         # time out for power up
@@ -61,7 +61,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.left = 0
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
-        print("Player has update")
 
     def powerup(self):
         self.power += 1

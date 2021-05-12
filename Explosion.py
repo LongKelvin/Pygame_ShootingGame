@@ -13,7 +13,7 @@ class Explosion(pygame.sprite.Sprite):
         self.frame = 0
         self.last_update = pygame.time.get_ticks()
         self.frame_rate = 75
-        print("Explosion has init complete")
+        # print("Explosion has init complete")
 
     def update(self):
         now = pygame.time.get_ticks()

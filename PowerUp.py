@@ -16,7 +16,7 @@ class PowerUp(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = center
         self.speedy = 5
-        print("Powerup has init complete")
+        # print("Powerup has init complete")
 
     def update(self):
         self.rect.y += self.speedy
