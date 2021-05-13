@@ -1,6 +1,6 @@
 import pygame
 import random
-from settings import *
+from Settings import *
 
 from Bullet import *
 import GameSound
@@ -38,29 +38,37 @@ class Player(pygame.sprite.Sprite):
             self.power -= 1
             self.power_time = pygame.time.get_ticks()
         # unhidden if hidden
-        if self.hidden and pygame.time.get_ticks() - self.hidden_time > 1000:
+        if self.hidden and pygame.time.get_ticks() - self.hidden_time > 2000:
             self.hidden = False
             self.rect.centerx = (WIDTH / 2)
             self.rect.bottom = HEIGHT - 10
         self.speedx = 0
-        keystate = pygame.key.get_pressed()
-        if keystate[pygame.K_LEFT]:
-            self.speedx = -5
-        if keystate[pygame.K_RIGHT]:
-            self.speedx = 5
-        if keystate[pygame.K_w] or keystate[pygame.K_UP]:
-            self.rect.top -= 5
-        if keystate[pygame.K_s] or keystate[pygame.K_DOWN]:
-            self.rect.bottom += 5
-        if keystate[pygame.K_SPACE]:
-            self.shoot()
-        self.rect.x += self.speedx
-        if self.rect.right > WIDTH:
-            self.rect.right = WIDTH
-        if self.rect.left < 0:
-            self.rect.left = 0
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
+
+
+        try:
+            keystate = pygame.key.get_pressed()
+            if keystate[pygame.K_LEFT]:
+                self.speedx = -6
+            if keystate[pygame.K_RIGHT]:
+                self.speedx = 6
+            if keystate[pygame.K_w] or keystate[pygame.K_UP]:
+                self.rect.top -= 6
+            if keystate[pygame.K_s] or keystate[pygame.K_DOWN]:
+                self.rect.bottom += 6
+            if keystate[pygame.K_SPACE]:
+                self.shoot()
+            self.rect.x += self.speedx
+            if self.rect.right > WIDTH:
+                self.rect.right = WIDTH
+            if self.rect.left < 0:
+                self.rect.left = 0
+            if self.rect.bottom > HEIGHT:
+                if self.hidden:
+                    self.rect.bottom = HEIGHT + 100
+                else:
+                    self.rect.bottom = HEIGHT
+        except:
+            print('Something went wrong in player event')
 
     def powerup(self):
         self.power += 1
@@ -87,4 +95,4 @@ class Player(pygame.sprite.Sprite):
     def hide(self):
         self.hidden = True
         self.hidden_time = pygame.time.get_ticks()
-        self.rect.center = (WIDTH / 2, HEIGHT - 10)
+        self.rect.center = (WIDTH / 2, HEIGHT + 200)

@@ -1,7 +1,6 @@
 # game windows init
-from os import path
 
-import pygame
+
 from os import path
 
 WIDTH = 800
@@ -23,9 +22,15 @@ GAME_TITLE = 'Shooting Game'
 # FONTNAME = "arial"
 FONTNAME = "bahnschrift"
 
+WIN_SCORE = 1000
+
+GAME_SOUND_VOLUME = 0.4
+
+GAME_BACKGROUND_MUSIC = 0.25
+
 # set up assets folders
 img_dir = path.join(path.dirname(__file__), 'img')
 snd_dir = path.join(path.dirname(__file__), 'snd')
 game_data_dir = path.join(path.dirname(__file__), 'game_data')
 
-print("load all game resources")
+# print("load all game resources")

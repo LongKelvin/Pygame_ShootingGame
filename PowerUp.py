@@ -1,5 +1,8 @@
 import random
-from settings import *
+
+import pygame
+
+from Settings import *
 
 
 class PowerUp(pygame.sprite.Sprite):
