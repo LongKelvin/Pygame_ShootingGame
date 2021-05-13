@@ -20,7 +20,8 @@ YELLOW = (255, 255, 0)
 GAME_TITLE = 'Shooting Game'
 # font for game
 # font_name = pygame.font.SysFont(None, 20)
-FONTNAME = "arial"
+# FONTNAME = "arial"
+FONTNAME = "bahnschrift"
 
 # set up assets folders
 img_dir = path.join(path.dirname(__file__), 'img')

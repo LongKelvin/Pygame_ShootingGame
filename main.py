@@ -18,6 +18,11 @@ class Game:
         self.running = True
         self.font_name = pygame.font.match_font(FONTNAME)
         self.load_data()
+        self.player_name = 'player 1'
+        self.pause = False
+        self.score = 0
+        self.player = None
+        self.playing = False
 
     def load_data(self):
         # load background image
@@ -84,17 +89,20 @@ class Game:
         # Game loop
         # Check background music
         self.playing = True
+        self.pause = False
         while self.playing:
+
             self.clock.tick(FPS)
             self.events()
-            self.update()
-            self.draw()
+            if not self.pause:
+                self.update()
+                self.draw()
 
     def update(self):
-
         # Game loop sprites update
         global death_explosion
         self.all_sprites.update()
+
         # hit mob ...
         # check to see if a bullet hit a mob
         hits = pygame.sprite.groupcollide(self.mobs, self.bullets, True, True)
@@ -136,14 +144,14 @@ class Game:
                 self.powerup_shield_sound.play()
                 if self.player.shield >= 100:
                     self.player.shield = 100
-                for mob in self.mobs:
-                    mob.kill()
-                    expl = Explosion(hit.rect.center, 'lg')
-                    self.all_sprites.add(expl)
-
-                self.score += 1000
-                for index in range(10):
-                    self.newmob()
+                # for mob in self.mobs:
+                #     mob.kill()
+                #     expl = Explosion(hit.rect.center, 'lg')
+                #     self.all_sprites.add(expl)
+                #
+                # self.score += 1000
+                # for index in range(10):
+                #     self.newmob()
 
             elif hit.type == 'gun':
                 self.player.powerup()
@@ -164,6 +172,9 @@ class Game:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     self.player.shoot()
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_p:
+                    self.show_pause_screen()
 
     def draw(self):
         # Game Loop - draw
@@ -171,9 +182,12 @@ class Game:
         self.screen.blit(self.background, self.background_rect)
         self.all_sprites.draw(self.screen)
         self.draw_text("Score:  " + str(self.score), 18, WHITE, WIDTH / 2, 10)
-        self.draw_text("Player shield:  ", 18, WHITE, 55, 0)
+        self.draw_text("Player shield:  ", 18, WHITE, 70, 0)
+        self.draw_text("Lives:  ", 18, WHITE, WIDTH - 150, 5)
         self.draw_shield_bar(10, 25, self.player.shield)
         self.draw_lives(WIDTH - 100, 5, self.player.lives, self.player_mini_img)
+        self.draw_text("Player:  ", 18, WHITE, WIDTH - 145, 30)
+        self.draw_text(self.player_name, 20, GREEN, WIDTH - 65, 30)
         # draw buffer
         pygame.display.flip()
 
@@ -215,6 +229,50 @@ class Game:
         self.wait_for_key()
         pygame.mixer.music.fadeout(500)
 
+    def show_pause_screen(self):
+        self.play_intro_music()
+        if not self.running:
+            return
+        self.screen.fill(BLACK)
+        self.draw_text("PAUSE GAME!", 48, WHITE, WIDTH / 2, HEIGHT / 4)
+        self.draw_text("Score: " + str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2 - 20)
+        self.draw_text("Press   'N'      to play new game", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 45)
+        self.draw_text("Press   'L'      to load previous game", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 70)
+        self.draw_text("Press   'S'      to save game state", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 90)
+        self.draw_text("Press   'Enter'  to resume", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 110)
+
+        pygame.display.flip()
+        # handle key press
+        waiting = True
+        while waiting:
+            pygame.init()
+            for event in pygame.event.get():
+                self.clock.tick(FPS)
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        # self.pause = False
+                        print('resume to game')
+                        waiting = False
+                    elif event.key == pygame.K_n:
+                        self.new()
+                        print('play new game')
+                        waiting = False
+                        # self.pause = False
+                    elif event.key == pygame.K_l:
+                        print("load game from file")
+                        waiting = False
+                        # self.pause = False
+                    elif event.key == pygame.K_s:
+                        # data = [self.player.lives, self.score, self.player.shield]
+                        data = ['2', str(self.score), '50']
+                        self.save_game_data(path.join(game_data_dir, 'game_new_data_1.txt'), data)
+                        print("save game to " + str(path))
+                        waiting = False
+                        # self.pause = False
+        pygame.mixer.music.fadeout(500)
+
     # draw text
     def draw_text(self, text, size, color, x, y):
         font = pygame.font.Font(self.font_name, size)
@@ -252,13 +310,57 @@ class Game:
         for data in g_data:
             save_file.write(data + '\n')
 
+    def input_text(self, size, type_input=0):
+        # type is define to get type of text
+        # example for player_name input or game_save_ file name
+        font = pygame.font.Font(self.font_name, size)
+        text = ''
+        self.pause = True
+        self.playing = False
+        if not self.running:
+            return
+        while self.pause:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:
+                        print("User input: " + text)
+                        # self.new()
+                        self.player_name = text
+                        text = ''
+                        self.pause = False
+                        self.playing = True
+
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
+                    else:
+                        if len(text) <= 8:
+                            text += event.unicode
+
+            self.screen.fill(BLACK)
+            # txt_surface = font.render(text, True, GREEN)
+            # self.screen.blit(txt_surface, (WIDTH / 4, HEIGHT / 2))
+            if type_input == 0:
+                self.draw_text("Enter Player Name: ", 24, WHITE, WIDTH / 4, HEIGHT / 4)
+            else:
+                self.draw_text("Enter File Name: ", 24, WHITE, WIDTH / 4, HEIGHT / 4)
+            self.draw_text(text, 24, GREEN, WIDTH / 2, HEIGHT / 4)
+
+            pygame.display.flip()
+            self.clock.tick(FPS)
+
 
 game = Game()
-# game.show_start_screen()
+
+game.show_start_screen()
+game.input_text(24)
+
 while game.running:
     # game.load_game_from_file(path.join(game_data_dir, 'game_data.txt'))
     # data = ['1', '200', '50']
     # game.save_game_data(path.join(game_data_dir, 'game_new_data.txt'),data)
+    # game.input_text(40)
     game.new()
     game.show_go_screen()
 
