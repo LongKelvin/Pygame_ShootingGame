@@ -25,5 +25,6 @@ FONTNAME = "arial"
 # set up assets folders
 img_dir = path.join(path.dirname(__file__), 'img')
 snd_dir = path.join(path.dirname(__file__), 'snd')
+game_data_dir = path.join(path.dirname(__file__), 'game_data')
 
 print("load all game resources")

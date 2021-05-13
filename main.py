@@ -56,7 +56,7 @@ class Game:
         pygame.mixer.music.set_volume(0.4)
         pygame.mixer.music.play(-1)
 
-    def new(self):
+    def new(self, player_lives=None, player_score=None, player_shield=None):
         # start a new game
         self.play_background_music(-1)
         self.score = 0
@@ -64,6 +64,13 @@ class Game:
         self.mobs = pygame.sprite.Group()
         self.powerups = pygame.sprite.Group()
         self.player = Player(self)
+        if not player_score is None:
+            self.score = player_score
+        if not player_shield is None:
+            self.player.shield = player_shield
+        if not player_lives is None:
+            self.player.lives = player_lives
+
         self.bullets = pygame.sprite.Group()
         self.all_sprites.add(self.player)
         for i in range(10):
@@ -129,6 +136,14 @@ class Game:
                 self.powerup_shield_sound.play()
                 if self.player.shield >= 100:
                     self.player.shield = 100
+                for mob in self.mobs:
+                    mob.kill()
+                    expl = Explosion(hit.rect.center, 'lg')
+                    self.all_sprites.add(expl)
+
+                self.score += 1000
+                for index in range(10):
+                    self.newmob()
 
             elif hit.type == 'gun':
                 self.player.powerup()
@@ -226,10 +241,24 @@ class Game:
             img_rect.y = y
             self.screen.blit(image, img_rect)
 
+    def load_game_from_file(self, filename):
+        game_data = open(filename, 'r')
+        data = game_data.read().splitlines()
+        self.new(int(data[0]), int(data[1]), int(data[2]))
+
+    def save_game_data(self, filename, g_data):
+        # game data include player lives, shield and score
+        save_file = open(filename, 'w+')
+        for data in g_data:
+            save_file.write(data + '\n')
+
 
 game = Game()
-game.show_start_screen()
+# game.show_start_screen()
 while game.running:
+    # game.load_game_from_file(path.join(game_data_dir, 'game_data.txt'))
+    # data = ['1', '200', '50']
+    # game.save_game_data(path.join(game_data_dir, 'game_new_data.txt'),data)
     game.new()
     game.show_go_screen()
 
