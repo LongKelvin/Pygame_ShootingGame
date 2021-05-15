@@ -4,18 +4,15 @@ import random
 from animation.Explosion import Explosion
 from animation.PowerUp import PowerUp
 from classes.Menu import MainMenu, PauseGameMenu, GameLoad_Menu
+
 from classes.TextBox import TextBox
-from config import Settings
+
 from config.Settings import*
 from enemy.Mob import Mob
-from player import *
-from animation import *
-from enemy import *
-import os
-import string
-from classes import *
 
-from player import *
+import os
+
+
 from player.Player import Player
 
 
