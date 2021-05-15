@@ -3,6 +3,8 @@ import sys
 from Settings import *
 import pygame
 
+from TextBox import TextBox
+
 
 class Menu:
     def __init__(self, game):
@@ -118,6 +120,7 @@ class MainMenu(Menu):
                 if keystate[pygame.K_RETURN]:
                     print("Press enter")  # Enter key
                     if self.state == 'Start':
+                        self.game.show_input_name()
                         self.game.new()
                         self.game.playing = True
                         self.display = False
@@ -129,9 +132,12 @@ class MainMenu(Menu):
                         self.game.current_menu.display_menu()
                     elif self.state == 'Save_game':
                         # self.game.curr_menu = self.game.credits
-                        self.game.show_input_filename(30)
-                        print(self.game.file_name)
-                        print("save game")
+                        # self.game.show_input_filename(30)
+                        # self.game.get_game_data()
+                        # self.game.save_game_data(self.game.file_name, self.game.file_data)
+                        # print(self.game.file_name)
+                        # print("save game")
+                        return
 
                     elif self.state == 'Stat':
                         # self.game.curr_menu = self.game.credits
@@ -234,6 +240,146 @@ class GameLoad_Menu(Menu):
                 if keystate[pygame.K_BACKSPACE]:
                     self.game.current_menu = self.game.main_menu
                     self.display = False
+
+    def events(self):
+        self.game.clock.tick(FPS)
+        self.update()
+
+
+class PauseGameMenu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.state = 'Resume'
+        self.startx = self.mid_width
+        self.starty = self.mid_height - 80
+        self.load_gamex = self.mid_width
+        self.load_gamey = self.mid_height - 30
+        self.savex = self.mid_width
+        self.savey = self.mid_height + 20
+        self.statx = self.mid_width
+        self.staty = self.mid_height + 70
+        self.optionx = self.mid_width
+        self.optiony = self.mid_height + 120
+        self.exitx = self.mid_width
+        self.exity = self.mid_height + 170
+        self.DOWN_KEY = False
+        self.UP_KEY = False
+        print("Main menu init")
+
+    def display_menu(self):
+        self.display = True
+        self.game.play_intro_music()
+        while self.display:
+            # self.game.events()
+            self.events()
+            self.game.screen.fill(BLACK)
+            self.game.draw_text('Pause Game', 50, GREEN, WIDTH / 2, HEIGHT / 2 - 200)
+            self.game.draw_text('Resume', 32, WHITE, self.startx, self.starty - 50)
+            self.game.draw_text('Start New Game', 32, WHITE, self.startx, self.starty)
+            self.game.draw_text('Load Game ', 32, WHITE, self.load_gamex, self.load_gamey)
+            self.game.draw_text('Save Game', 32, WHITE, self.savex, self.savey)
+            self.game.draw_text('Stat Player', 32, WHITE, self.statx, self.staty)
+            self.game.draw_text('Game Option', 32, WHITE, self.optionx, self.optiony)
+            self.game.draw_text('Game Exit', 32, WHITE, self.exitx, self.exity)
+            self.draw_cursor()
+            self.render_to_screen()
+
+    def update(self):
+        # print(self.state)
+        for event in pygame.event.get():
+            self.game.clock.tick(FPS)
+            if event.type == pygame.KEYDOWN:
+                keystate = pygame.key.get_pressed()
+                if keystate[pygame.K_DOWN]:
+                    self.DOWN_KEY = True
+                    if self.state == "Resume":
+                        self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
+                        self.state = 'Start'
+                    elif self.state == "Start":
+                        self.cursor_rect.midtop = (self.load_gamex + self.offset, self.load_gamey)
+                        self.state = 'Load_game'
+                    elif self.state == "Load_game":
+                        self.cursor_rect.midtop = (self.savex + self.offset, self.savey)
+                        self.state = 'Save_game'
+                    elif self.state == "Save_game":
+                        self.cursor_rect.midtop = (self.statx + self.offset, self.staty)
+                        self.state = 'Stat'
+                    elif self.state == "Stat":
+                        self.cursor_rect.midtop = (self.optionx + self.offset, self.optiony)
+                        self.state = 'Option'
+                    elif self.state == "Option":
+                        self.cursor_rect.midtop = (self.exitx + self.offset, self.exity)
+                        self.state = 'Exit'
+                    elif self.state == "Exit":
+                        self.cursor_rect.midtop = (self.startx + self.offset, self.starty - 50)
+                        self.state = 'Resume'
+
+                if keystate[pygame.K_UP]:
+                    self.UP_KEY = True
+                    if self.state == "Resume":
+                        self.cursor_rect.midtop = (self.exitx + self.offset, self.exity)
+                        self.state = 'Exit'
+                    elif self.state == "Exit":
+                        self.cursor_rect.midtop = (self.optionx + self.offset, self.optiony)
+                        self.state = 'Option'
+                    elif self.state == "Option":
+                        self.cursor_rect.midtop = (self.statx + self.offset, self.staty)
+                        self.state = 'Stat'
+                    elif self.state == "Stat":
+                        self.cursor_rect.midtop = (self.savex + self.offset, self.savey)
+                        self.state = 'Save_game'
+                    elif self.state == "Save_game":
+                        self.cursor_rect.midtop = (self.load_gamex + self.offset, self.load_gamey)
+                        self.state = 'Load_game'
+                    elif self.state == "Load_game":
+                        self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
+                        self.state = 'Start'
+                    elif self.state == "Start":
+                        self.cursor_rect.midtop = (self.startx + self.offset, self.starty - 50)
+                        self.state = 'Resume'
+
+            if event.type == pygame.KEYDOWN:
+                # print("menu event key press")
+                keystate = pygame.key.get_pressed()
+                if keystate[pygame.K_RETURN]:
+                    print("Press enter")  # Enter key
+                    if self.state == 'Resume':
+                        print("resume game")
+                        self.display = False
+                        return
+
+                    elif self.state == 'Start':
+                        self.game.show_input_name()
+                        self.game.new()
+                        self.game.playing = True
+                        self.display = False
+                        print("new game")
+                    elif self.state == 'Load_game':
+                        # self.game.curr_menu = self.game.options
+                        print("load game")
+                        self.game.current_menu = self.game.game_load_menu
+                        self.game.current_menu.display_menu()
+                    elif self.state == 'Save_game':
+                        # self.game.curr_menu = self.game.credits
+                        self.game.show_input_filename(30)
+                        self.game.get_game_data()
+                        self.game.save_game_data(self.game.file_name, self.game.file_data)
+                        self.game.update_list_save_data()
+                        print(self.game.file_name)
+                        print("save game")
+                        return
+
+                    elif self.state == 'Stat':
+                        # self.game.curr_menu = self.game.credits
+                        print("player stats")
+                        self.game.show_input_name(30)
+                    elif self.state == 'Option':
+                        # self.game.curr_menu = self.game.credits
+                        print("game option")
+                    elif self.state == 'Exit':
+                        self.display = False
+                        pygame.quit()
+                        sys.exit()
 
     def events(self):
         self.game.clock.tick(FPS)

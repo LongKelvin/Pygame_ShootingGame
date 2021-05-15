@@ -9,6 +9,7 @@ import os
 import string
 from Menu import *
 from TextBox import *
+from TextBox import TextBox
 
 
 class Game:
@@ -28,13 +29,14 @@ class Game:
         self.score = 0
         self.player = Player(self)
         self.playing = False
-        self.file_data = None
+        self.file_data = []
         self.file_name = 'game_data_.txt'
         self.winning = False
         self.winning_bar = 0
         self.list_save_data = os.listdir(game_data_dir)
         self.main_menu = MainMenu(self)
         self.game_load_menu = GameLoad_Menu(self)
+        self.pause_menu = PauseGameMenu(self)
         self.current_menu = self.main_menu
 
     def load_data(self):
@@ -220,7 +222,9 @@ class Game:
                     self.player.shoot()
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_p:
-                    self.show_pause_screen()
+                    # self.show_pause_screen()
+                    self.current_menu = self.pause_menu
+                    self.current_menu.display_menu()
 
     def draw(self):
         # Game Loop - draw
@@ -536,9 +540,9 @@ class Game:
 
     def save_game_data(self, filename, g_data):
         # game data include player lives, shield and score
-        save_file = open(filename, 'w+')
+        save_file = open(path.join(game_data_dir, filename), 'w+')
         for data in g_data:
-            save_file.write(data + '\n')
+            save_file.write(str(data) + '\n')
 
     def input_text(self, size, type_input=0, x=WIDTH / 2, y=HEIGHT / 4, title='', text_len=8, selected_value=None):
         # type is define to get type of text
@@ -599,5 +603,15 @@ class Game:
         textbox.enter_player_name(WIDTH / 4, HEIGHT / 2, font_size)
 
     def show_input_filename(self, font_size=None):
+        self.draw_text('Save Game', 50, GREEN, WIDTH / 2, HEIGHT / 2 - 200)
         textbox = TextBox(self)
         textbox.enter_file_name(WIDTH / 4, HEIGHT / 2, font_size)
+
+    def get_game_data(self):
+        self.file_data.append(self.player.lives, )
+        self.file_data.append(self.score)
+        self.file_data.append(self.player.shield, )
+        self.file_data.append(self.player_name)
+
+    def update_list_save_data(self):
+        self.list_save_data = os.listdir(game_data_dir)

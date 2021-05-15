@@ -23,7 +23,7 @@ GAME_TITLE = 'Shooting Game'
 # FONTNAME = "arial"
 FONTNAME = "bahnschrift"
 
-WIN_SCORE = 1000
+WIN_SCORE = 100000
 
 GAME_SOUND_VOLUME = 0.4
 
