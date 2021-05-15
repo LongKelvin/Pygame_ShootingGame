@@ -1,6 +1,6 @@
 import pygame
-from Game import *
-from Settings import *
+from classes.Game import *
+from config.Settings import *
 
 
 class TextBox:

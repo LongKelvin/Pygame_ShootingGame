@@ -1,6 +1,6 @@
 import pygame
 
-from Settings import *
+from config.Settings import *
 
 
 class Explosion(pygame.sprite.Sprite):

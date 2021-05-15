@@ -3,7 +3,7 @@ import random
 
 import pygame
 
-from Settings import *
+from config.Settings import *
 
 
 class Mob(pygame.sprite.Sprite):

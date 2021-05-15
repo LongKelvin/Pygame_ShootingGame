@@ -1,5 +1,8 @@
-from Game import *
-from Menu import *
+from classes.Game import *
+from classes.TextBox import *
+
+
+
 
 game = Game()
 

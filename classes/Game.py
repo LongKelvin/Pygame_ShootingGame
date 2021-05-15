@@ -1,15 +1,22 @@
 import pygame
 import random
-from Settings import *
-from Player import *
-from Explosion import *
-from Mob import *
-from PowerUp import *
+
+from animation.Explosion import Explosion
+from animation.PowerUp import PowerUp
+from classes.Menu import MainMenu, PauseGameMenu, GameLoad_Menu
+from classes.TextBox import TextBox
+from config import Settings
+from config.Settings import*
+from enemy.Mob import Mob
+from player import *
+from animation import *
+from enemy import *
 import os
 import string
-from Menu import *
-from TextBox import *
-from TextBox import TextBox
+from classes import *
+
+from player import *
+from player.Player import Player
 
 
 class Game:

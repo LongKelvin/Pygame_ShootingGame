@@ -1,9 +1,9 @@
 import pygame
 import random
-from Settings import *
+from config.Settings import *
 
-from Bullet import *
-import GameSound
+from weapon.Bullet import *
+
 
 
 class Player(pygame.sprite.Sprite):

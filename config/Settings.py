@@ -37,8 +37,12 @@ FONT_SIZE_NORMAL = 32
 FONT_SIZE_SMALL = 18
 
 # set up assets folders
-img_dir = path.join(path.dirname(__file__), 'img')
-snd_dir = path.join(path.dirname(__file__), 'snd')
-game_data_dir = path.join(path.dirname(__file__), 'game_data')
+abs_folder = path.dirname(path.abspath(__file__))
+# root_dir = path.dirname(path.abspath(abs_folder))
+img_dir = path.join(path.dirname(abs_folder), 'img')
+snd_dir = path.join(path.dirname(abs_folder), 'snd')
+game_data_dir = path.join(path.dirname(abs_folder), 'game_data')
+
+print(img_dir)
 
 # print("load all game resources")

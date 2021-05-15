@@ -1,9 +1,9 @@
 import sys
 
-from Settings import *
+from config.Settings import *
 import pygame
 
-from TextBox import TextBox
+from classes.TextBox import TextBox
 
 
 class Menu:
