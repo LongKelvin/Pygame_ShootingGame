@@ -14,6 +14,7 @@ while game.running:
     # game.save_game_data(path.join(game_data_dir, 'game_new_data.txt'),data)
     # game.input_text(40)
     game.current_menu.display_menu()
+
     game.show_go_screen()
 
 pygame.quit()

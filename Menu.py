@@ -125,13 +125,18 @@ class MainMenu(Menu):
                     elif self.state == 'Load_game':
                         # self.game.curr_menu = self.game.options
                         print("load game")
+                        self.game.current_menu = self.game.game_load_menu
+                        self.game.current_menu.display_menu()
                     elif self.state == 'Save_game':
                         # self.game.curr_menu = self.game.credits
+                        self.game.show_input_filename(30)
+                        print(self.game.file_name)
                         print("save game")
 
                     elif self.state == 'Stat':
                         # self.game.curr_menu = self.game.credits
                         print("player stats")
+                        self.game.show_input_name(30)
                     elif self.state == 'Option':
                         # self.game.curr_menu = self.game.credits
                         print("game option")
@@ -143,31 +148,93 @@ class MainMenu(Menu):
     def events(self):
         self.game.clock.tick(FPS)
         self.update()
-        # self.display = True
-        # while self.display:
-        #     for event in pygame.event.get():
-        #         self.game.clock.tick(FPS)
-        #         if event.type == pygame.KEYDOWN:
-        #             print("menu event key press")
-        #             keystate = pygame.key.get_pressed()
-        #             if keystate[pygame.K_RETURN]:
-        #                 print("Press enter")  # Enter key
-        #                 if self.state == 'Start':
-        #                     self.game.playing = True
-        #                     print("new game")
-        #                 elif self.state == 'Load_game':
-        #                     # self.game.curr_menu = self.game.options
-        #                     pass
-        #                 elif self.state == 'Save_game':
-        #                     # self.game.curr_menu = self.game.credits
-        #                     pass
-        #                 elif self.state == 'Stat':
-        #                     # self.game.curr_menu = self.game.credits
-        #                     pass
-        #                 elif self.state == 'Option':
-        #                     # self.game.curr_menu = self.game.credits
-        #                     pass
-        #                 elif self.state == 'Exit':
-        #                     pygame.quit()
-        #
-        #                 self.display = False
+
+
+class GameLoad_Menu(Menu):
+    def __init__(self, game):
+        Menu.__init__(self, game)
+        self.game = game
+        self.list_data = self.game.list_save_data
+        self.list_len = len(self.list_data)
+        self.state = 1
+        self.startx = self.mid_width
+        self.starty = self.mid_height - 80
+        self.pos_y = self.starty
+        self.DOWN_KEY = False
+        self.UP_KEY = False
+        print("GameLoad menu init")
+
+    def display_menu(self):
+        self.display = True
+        # self.game.play_intro_music()
+        while self.display:
+            # self.game.events()
+            self.events()
+            self.game.screen.fill(BLACK)
+
+            self.game.draw_text('LOAD GAME', 50, GREEN, WIDTH / 2, HEIGHT / 2 - 200)
+            pos_y = 0
+            for data in self.list_data:
+                data_ = data.replace('.txt', '')
+                self.game.draw_text(data_, 32, WHITE, self.startx, self.starty + pos_y)
+                pos_y += 30
+
+            self.draw_cursor()
+            self.render_to_screen()
+
+    def update(self):
+
+        # print(self.state)
+        for event in pygame.event.get():
+            self.game.clock.tick(FPS)
+            if event.type == pygame.KEYDOWN:
+                keystate = pygame.key.get_pressed()
+                if keystate[pygame.K_DOWN]:
+                    self.DOWN_KEY = True
+                    if self.state < self.list_len:
+                        if self.state == 1:
+                            self.pos_y = self.starty + 30
+                            self.cursor_rect.midtop = (self.startx + self.offset, self.pos_y)
+                            self.state = self.state + 1
+                            print(self.pos_y)
+                        else:
+                            self.pos_y += 30
+                            self.cursor_rect.midtop = (self.startx + self.offset, self.pos_y)
+                            self.state = self.state + 1
+                            print(self.pos_y)
+                    else:
+                        self.cursor_rect.midtop = (self.startx + self.offset, self.starty)
+                        self.state = 1
+                        print(self.pos_y)
+
+                if keystate[pygame.K_UP]:
+                    self.UP_KEY = True
+                    # print(self.state)
+                    # if self.state < self.list_len:
+                    if self.state == 1:
+                        print(self.pos_y)
+                        self.pos_y = (self.starty + (self.list_len - 1) * 30)
+                        self.cursor_rect.midtop = (self.startx + self.offset, self.pos_y)
+                        self.state = self.list_len
+                    else:
+                        self.pos_y -= 30
+                        print(self.pos_y)
+                        self.cursor_rect.midtop = (self.startx + self.offset, self.pos_y)
+                        self.state = self.state - 1
+
+            if event.type == pygame.KEYDOWN:
+                # print("menu event key press")
+                keystate = pygame.key.get_pressed()
+                if keystate[pygame.K_RETURN]:
+                    print("GameLoad event return")  # Enter key
+                    selected_value = self.state
+                    if selected_value - 1 < self.list_len:
+                        self.game.load_game_from_file(self.list_data[selected_value - 1])
+
+                if keystate[pygame.K_BACKSPACE]:
+                    self.game.current_menu = self.game.main_menu
+                    self.display = False
+
+    def events(self):
+        self.game.clock.tick(FPS)
+        self.update()

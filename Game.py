@@ -8,6 +8,7 @@ from PowerUp import *
 import os
 import string
 from Menu import *
+from TextBox import *
 
 
 class Game:
@@ -28,8 +29,12 @@ class Game:
         self.player = Player(self)
         self.playing = False
         self.file_data = None
-        self.file_name = ''
+        self.file_name = 'game_data_.txt'
+        self.winning = False
+        self.winning_bar = 0
+        self.list_save_data = os.listdir(game_data_dir)
         self.main_menu = MainMenu(self)
+        self.game_load_menu = GameLoad_Menu(self)
         self.current_menu = self.main_menu
 
     def load_data(self):
@@ -168,13 +173,16 @@ class Game:
             self.player_die_sound.play()
             self.playing = False
 
-        if self.score in range(WIN_SCORE - 300, WIN_SCORE):
-            self.play_intro_music()
+        # if self.score in range(WIN_SCORE - 300, WIN_SCORE):
+        #     self.play_intro_music()
 
+        # WINNING SECTION
         if self.score >= WIN_SCORE:
-            # pygame.mixer.music.stop()
-
             now = pygame.time.get_ticks()
+            self.winning = True
+            # pygame.mixer.music.stop()
+            # self.clock.tick(FPS_SLOWING)
+
             print(now)
             self.player.rect.y = HEIGHT / 2 - 100
             self.player.rect.x = WIDTH / 2
@@ -192,7 +200,11 @@ class Game:
                 for sound in self.expl_sounds:
                     sound.play()
 
-            if now > 15000:
+            for power in self.powerups:
+                expl = Explosion(power.rect.center, 'lg')
+                self.all_sprites.add(expl)
+                power.kill()
+            if now > GAME_WINNING_TIME:
                 self.show_winner_screen()
 
     def events(self):
@@ -223,6 +235,8 @@ class Game:
         self.draw_lives(WIDTH - 100, 5, self.player.lives, self.player_mini_img)
         self.draw_text("Player:  ", 18, WHITE, WIDTH - 145, 30)
         self.draw_text(self.player_name, 20, GREEN, WIDTH - 65, 30)
+        # if self.winning:
+        #     self.draw_game_winning_bar(100, HEIGHT / 2, 100)
         # draw buffer
         pygame.display.flip()
 
@@ -265,17 +279,20 @@ class Game:
         pygame.mixer.music.fadeout(500)
 
     def show_winner_screen(self):
-        # game over/continue
+        # game winner screen
+        self.clock.tick(FPS)
         # pygame.mixer.music.stop()
-        # self.play_intro_music()
+        self.play_intro_music()
         if not self.running:
             return
         # self.screen.fill(BLACK)
+        now = pygame.time.get_ticks()
         self.draw_text("YOU WIN", 48, WHITE, WIDTH / 2, HEIGHT / 4)
         self.draw_text("High Score: " + str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
         self.draw_text("Press a key to play again", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
 
         pygame.display.flip()
+        # if pygame.time.get_ticks() -  now > GAME_DELAY_EVENT:
         self.wait_for_key()
         pygame.mixer.music.fadeout(500)
         self.current_menu.display_menu()
@@ -367,6 +384,17 @@ class Game:
             percent = 0
         BAR_LENGTH = 100
         BAR_HEIGHT = 10
+        fill = (percent / 100) * BAR_LENGTH
+        outline_rect = pygame.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+        fill_rect = pygame.Rect(x, y, fill, BAR_HEIGHT)
+        pygame.draw.rect(self.screen, GREEN, fill_rect)
+        pygame.draw.rect(self.screen, WHITE, outline_rect, 2)
+
+    def draw_game_winning_bar(self, x, y, percent):
+        if percent < 0:
+            percent = 0
+        BAR_LENGTH = WIDTH - 100
+        BAR_HEIGHT = HEIGHT / 8
         fill = (percent / 100) * BAR_LENGTH
         outline_rect = pygame.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
         fill_rect = pygame.Rect(x, y, fill, BAR_HEIGHT)
@@ -500,7 +528,7 @@ class Game:
         pygame.mixer.music.fadeout(500)
 
     def load_game_from_file(self, filename):
-        game_data = open(filename, 'r')
+        game_data = open(path.join(game_data_dir, filename), 'r')
         data = game_data.read().splitlines()
         print(data)
         self.new(int(data[0]), int(data[1]), int(data[2]))
@@ -565,3 +593,11 @@ class Game:
 
             pygame.display.flip()
             self.clock.tick(FPS)
+
+    def show_input_name(self, font_size=None):
+        textbox = TextBox(self)
+        textbox.enter_player_name(WIDTH / 4, HEIGHT / 2, font_size)
+
+    def show_input_filename(self, font_size=None):
+        textbox = TextBox(self)
+        textbox.enter_file_name(WIDTH / 4, HEIGHT / 2, font_size)
