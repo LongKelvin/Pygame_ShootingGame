@@ -8,7 +8,7 @@ from Settings import *
 class PowerUp(pygame.sprite.Sprite):
     def __init__(self, center):
         pygame.sprite.Sprite.__init__(self)
-        # self.image = pygame.Surface((10, 20))
+
         self.powerup_images = {'shield': pygame.image.load(path.join(img_dir, 'shield_gold.png')).convert(),
                                'gun': pygame.image.load(path.join(img_dir, 'bolt_gold.png')).convert()}
         self.type = random.choice(['shield', 'gun'])

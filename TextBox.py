@@ -44,8 +44,7 @@ class TextBox:
                             self.text += event.unicode
 
             self.game.screen.fill(BLACK)
-            # txt_surface = font.render(text, True, GREEN)
-            # self.screen.blit(txt_surface, (WIDTH / 4, HEIGHT / 2))
+
 
             if not font_size is None:
                 self.font_size = font_size
@@ -84,8 +83,6 @@ class TextBox:
                             self.text += event.unicode
 
             self.game.screen.fill(BLACK)
-            # txt_surface = font.render(text, True, GREEN)
-            # self.screen.blit(txt_surface, (WIDTH / 4, HEIGHT / 2))
 
             if not font_size is None:
                 self.font_size = font_size

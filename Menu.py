@@ -23,10 +23,8 @@ class Menu:
         self.game.draw_text('*', 50, WHITE, self.cursor_rect.x, self.cursor_rect.y)
 
     def render_to_screen(self):
-        # self.game.clock.tick(FPS)
-        # self.game.screen.blit(self.game.background, (0, 0))
         pygame.display.update()
-        # pygame.display.flip()
+
 
 
 class MainMenu(Menu):
@@ -131,12 +129,6 @@ class MainMenu(Menu):
                         self.game.current_menu = self.game.game_load_menu
                         self.game.current_menu.display_menu()
                     elif self.state == 'Save_game':
-                        # self.game.curr_menu = self.game.credits
-                        # self.game.show_input_filename(30)
-                        # self.game.get_game_data()
-                        # self.game.save_game_data(self.game.file_name, self.game.file_data)
-                        # print(self.game.file_name)
-                        # print("save game")
                         return
 
                     elif self.state == 'Stat':
@@ -150,6 +142,9 @@ class MainMenu(Menu):
                         self.display = False
                         pygame.quit()
                         sys.exit()
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
     def events(self):
         self.game.clock.tick(FPS)

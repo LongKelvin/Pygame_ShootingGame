@@ -18,9 +18,7 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
 GAME_TITLE = 'Shooting Game'
-# font for game
-# font_name = pygame.font.SysFont(None, 20)
-# FONTNAME = "arial"
+
 FONTNAME = "bahnschrift"
 
 WIN_SCORE = 100000

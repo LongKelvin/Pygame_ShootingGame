@@ -239,9 +239,6 @@ class Game:
         self.draw_lives(WIDTH - 100, 5, self.player.lives, self.player_mini_img)
         self.draw_text("Player:  ", 18, WHITE, WIDTH - 145, 30)
         self.draw_text(self.player_name, 20, GREEN, WIDTH - 65, 30)
-        # if self.winning:
-        #     self.draw_game_winning_bar(100, HEIGHT / 2, 100)
-        # draw buffer
         pygame.display.flip()
 
     def wait_for_key(self):
@@ -254,18 +251,6 @@ class Game:
                     self.running = False
                 if event.type == pygame.KEYUP:
                     waiting = False
-
-    def show_start_screen(self):
-        # game splash/start screen
-        self.play_intro_music()
-        self.screen.fill(BLACK)
-        self.draw_text(GAME_TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
-        self.draw_text("Arrows to move, Space to fire", 22, WHITE, WIDTH / 2, HEIGHT / 2)
-        self.draw_text("Press a key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
-        # self.draw_text("High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, 15)
-        pygame.display.flip()
-        self.wait_for_key()
-        pygame.mixer.music.fadeout(500)
 
     def show_go_screen(self):
         # game over/continue
@@ -300,76 +285,6 @@ class Game:
         self.wait_for_key()
         pygame.mixer.music.fadeout(500)
         self.current_menu.display_menu()
-
-    def show_pause_screen(self):
-        self.play_intro_music()
-        if not self.running:
-            return
-        self.screen.fill(BLACK)
-        self.draw_text("PAUSE GAME!", 48, WHITE, WIDTH / 2, HEIGHT / 4)
-        self.draw_text("Score: " + str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2 - 20)
-        self.draw_text("Press   'N'      to play new game", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 45)
-        self.draw_text("Press   'L'      to load previous game", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 70)
-        self.draw_text("Press   'S'      to save game state", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 90)
-        self.draw_text("Press   'Enter'  to resume", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 110)
-        self.draw_text("Press   'ESC'  to quit", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 130)
-
-        pygame.display.flip()
-        # handle key press
-        # waiting_for_child = False
-        waiting = True
-        while waiting:
-            pygame.init()
-            for event in pygame.event.get():
-                self.clock.tick(FPS)
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        # self.pause = False
-                        print('resume to game')
-                        waiting = False
-                    elif event.key == pygame.K_n:
-                        self.new()
-                        print('play new game')
-                        waiting = False
-                        # self.pause = False
-                    elif event.key == pygame.K_l:
-                        print("load game from file")
-
-                        # count = 0
-                        # for name in all_data:
-                        #     count += 1
-                        #     name = name.replace('.txt', '')
-                        #     print(name)
-                        # self.draw_text(str(count) + ". " + str(name), 18, GREEN, WIDTH / 2, HEIGHT / 4)
-                        # self.screen.fill(BLACK)
-                        # waiting_for_child = True
-                        waiting = False
-
-                        # self.pause = False
-                    elif event.key == pygame.K_s:
-                        # data = [self.player.lives, self.score, self.player.shield]
-                        data = ['2', str(self.score), '50']
-                        self.save_game_data(path.join(game_data_dir, 'game_new_data_1.txt'), data)
-                        print("save game to " + str(path))
-                        waiting = False
-                        # self.pause = False
-                    elif event.key == pygame.K_ESCAPE:
-                        print("quit game  ")
-                        pygame.quit()
-                        waiting = False
-                        sys.exit()
-        # while waiting_for_child:
-        #     self.clock.tick(FPS)
-        #     self.screen.fill(BLACK)
-        #     all_data = os.listdir(game_data_dir)
-        #     self.show_game_list_data(all_data)
-
-        try:
-            pygame.mixer.music.fadeout(500)
-        except:
-            print("game mixer music is not init")
 
     # draw text
     def draw_text(self, text, size, color, x, y):
@@ -412,125 +327,6 @@ class Game:
             img_rect.y = y
             self.screen.blit(image, img_rect)
 
-    def show_game_list_data1(self, list_data):
-        # game splash/start screen
-        if not self.running:
-            return
-        self.play_intro_music()
-        self.screen.fill(BLACK)
-        self.draw_text("GAME LOAD", 40, WHITE, WIDTH / 2, 20)
-        distance_y = 0
-        index = 0
-        for data in list_data:
-            index += 1
-            distance_y += 30
-            temp = data.replace('.txt', '')
-            self.draw_text(str(index) + '. ' + str(temp), 24, GREEN, WIDTH / 2, HEIGHT / 4 + distance_y)
-        pygame.display.flip()
-
-        # event handle
-        key_waiting = True
-        while key_waiting:
-            pygame.init()
-            for event in pygame.event.get():
-                self.clock.tick(FPS)
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        selected = event.unicode
-                        print(selected)
-                        key_waiting = False
-
-        pygame.mixer.music.fadeout(500)
-
-    def show_game_list_data(self, list_data):
-        self.file_data = list_data
-        self.play_intro_music()
-        if not self.running:
-            return
-        self.screen.fill(BLACK)
-        self.draw_text("GAME LOAD", 40, WHITE, WIDTH / 2, 20)
-        distance_y = 0
-        index = 0
-        selected_value = ''
-        for data in list_data:
-            index += 1
-            distance_y += 30
-            temp = data.replace('.txt', '')
-            self.draw_text(str(index) + '. ' + str(temp), 24, GREEN, WIDTH / 2, HEIGHT / 4 + distance_y)
-        # self.draw_text("Select file: ", 24, WHITE, WIDTH / 2, 450)
-        # self.input_text(24, -1, WIDTH / 2 + 100, 450)
-        self.draw_text("Press number to select and then Enter", 24, WHITE, WIDTH / 2, 500)
-        self.draw_text("Press ESC to Exit", 24, WHITE, WIDTH / 2, 550)
-
-        self.input_text(24, 3, WIDTH / 2, 450, 'Select file: ', 1, selected_value)
-        # except:
-        #     print("something went wrong in input_text function")
-
-        try:
-            pygame.display.flip()
-        except:
-            print('Display mode not set in show_all_game_data_list')
-        # handle key press
-        # waiting_for_child = False
-        waiting = True
-        while waiting:
-            pygame.init()
-            for event in pygame.event.get():
-                self.clock.tick(FPS)
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        # self.pause = False
-                        print('load game')
-
-                        # print(selected_value)
-                        # if selected_value.isnumeric():
-
-                        # selected = int(selected_value)
-                        # print(type(selected))
-                        # if selected < len(list_data):
-                        #     selected_data = list_data[selected_value-1]
-                        # selected_data = list_data[1]
-                        # self.file_data = selected_data
-                        self.load_game_from_file(path.join(game_data_dir, self.file_name))
-                        waiting = False
-                    elif event.key == pygame.K_n:
-                        self.new()
-                        print('play new game')
-                        waiting = False
-                        # self.pause = False
-                    elif event.key == pygame.K_l:
-                        print("load game from file")
-
-                        # count = 0
-                        # for name in all_data:
-                        #     count += 1
-                        #     name = name.replace('.txt', '')
-                        #     print(name)
-                        # self.draw_text(str(count) + ". " + str(name), 18, GREEN, WIDTH / 2, HEIGHT / 4)
-                        # self.screen.fill(BLACK)
-                        # waiting_for_child = True
-                        waiting = False
-
-                        # self.pause = False
-                    elif event.key == pygame.K_s:
-                        # data = [self.player.lives, self.score, self.player.shield]
-                        data = ['2', str(self.score), '50']
-                        self.save_game_data(path.join(game_data_dir, 'game_new_data_1.txt'), data)
-                        print("save game to " + str(path))
-                        waiting = False
-                        # self.pause = False
-        # while waiting_for_child:
-        #     self.clock.tick(FPS)
-        #     self.screen.fill(BLACK)
-        #     all_data = os.listdir(game_data_dir)
-        #     self.show_game_list_data(all_data)
-
-        pygame.mixer.music.fadeout(500)
-
     def load_game_from_file(self, filename):
         game_data = open(path.join(game_data_dir, filename), 'r')
         data = game_data.read().splitlines()
@@ -543,60 +339,6 @@ class Game:
         save_file = open(path.join(game_data_dir, filename), 'w+')
         for data in g_data:
             save_file.write(str(data) + '\n')
-
-    def input_text(self, size, type_input=0, x=WIDTH / 2, y=HEIGHT / 4, title='', text_len=8, selected_value=None):
-        # type is define to get type of text
-        # example for player_name input or game_save_ file name
-        font = pygame.font.Font(self.font_name, size)
-        text = ''
-        text_selected = ''
-        self.pause = True
-        self.playing = False
-        if not self.running:
-            return
-        while self.pause:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_RETURN:
-                        print("User input: " + text)
-                        # self.new()
-                        text_selected = text
-                        if type_input == 4:
-                            if not self.file_data is None:
-                                selected = int(text)
-                                self.file_name = self.file_data[selected]
-                        text = ''
-                        self.pause = False
-                        self.playing = True
-
-                    elif event.key == pygame.K_BACKSPACE:
-                        text = text[:-1]
-                    else:
-                        if len(text) < text_len:
-                            text += event.unicode
-
-            # self.screen.fill(BLACK)
-            # txt_surface = font.render(text, True, GREEN)
-            # self.screen.blit(txt_surface, (WIDTH / 4, HEIGHT / 2))
-            if type_input == 0:
-                self.draw_text("Enter Player Name: ", 24, WHITE, WIDTH / 4, HEIGHT / 4)
-                self.draw_text(text, 24, GREEN, WIDTH / 2, HEIGHT / 4)
-                self.player_name = text_selected
-            elif type_input == 1:
-                self.draw_text("Enter File Name: ", 24, WHITE, WIDTH / 4, HEIGHT / 4)
-                self.draw_text(text, 24, GREEN, WIDTH / 2, HEIGHT / 4)
-                self.file_name = text_selected
-            else:
-                self.draw_text(title, size, GREEN, x, y)
-                self.draw_text(text, 24, GREEN, x + len(title) + 100, y)
-                if not selected_value is None:
-                    # selected_value = int(text_selected)
-                    self.file_name = self.file_data[0]
-
-            pygame.display.flip()
-            self.clock.tick(FPS)
 
     def show_input_name(self, font_size=None):
         textbox = TextBox(self)
