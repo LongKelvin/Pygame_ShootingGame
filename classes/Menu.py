@@ -134,7 +134,9 @@ class MainMenu(Menu):
                     elif self.state == 'Stat':
                         # self.game.curr_menu = self.game.credits
                         print("player stats")
-                        self.game.show_input_name(30)
+                        # self.game.show_input_name(30)
+                        self.game.get_player_stat('player_stat.txt')
+                        self.display = False
                     elif self.state == 'Option':
                         # self.game.curr_menu = self.game.credits
                         print("game option")
@@ -367,7 +369,9 @@ class PauseGameMenu(Menu):
                     elif self.state == 'Stat':
                         # self.game.curr_menu = self.game.credits
                         print("player stats")
-                        self.game.show_input_name(30)
+                        # self.game.show_input_name(30)
+                        self.game.get_player_stat('player_stat.txt')
+                        self.display = False
                     elif self.state == 'Option':
                         # self.game.curr_menu = self.game.credits
                         print("game option")

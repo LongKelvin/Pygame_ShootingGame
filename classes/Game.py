@@ -361,3 +361,9 @@ class Game:
 
     def update_list_save_data(self):
         self.list_save_data = os.listdir(game_data_dir)
+
+    def get_player_stat(self, filename):
+        tempdata = open(path.join(game_data_dir, filename), 'r')
+        data = tempdata.read().splitlines()
+        print(data)
+

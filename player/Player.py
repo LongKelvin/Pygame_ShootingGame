@@ -5,7 +5,6 @@ from config.Settings import *
 from weapon.Bullet import *
 
 
-
 class Player(pygame.sprite.Sprite):
     # sprite for the player
     def __init__(self, game):
@@ -43,7 +42,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.centerx = (WIDTH / 2)
             self.rect.bottom = HEIGHT - 10
         self.speedx = 0
-
 
         try:
             keystate = pygame.key.get_pressed()
