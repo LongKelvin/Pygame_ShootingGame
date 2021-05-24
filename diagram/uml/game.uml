@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#D:/MY_WORKLOAD/PYTHON_WORKLOAD/PYGAME/Pygame_ShootingGame/classes/Game.py</OriginalElement>
+  <nodes>
+    <node x="0.0" y="0.0">classes.Game.Game</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.4671887235708694" x="187.7734553885736" y="320.5882925711667" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Inner Classes</Category>
+    <Category>Fields</Category>
+  </Categories>
+</Diagram>
+

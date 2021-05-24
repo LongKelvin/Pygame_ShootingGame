@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#D:/MY_WORKLOAD/PYTHON_WORKLOAD/PYGAME/Pygame_ShootingGame/enemy/Mob.py</OriginalElement>
+  <nodes>
+    <node x="0.0" y="0.0">enemy.Mob.Mob</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="2.1297117516629718" x="258.2359173663958" y="180.0270692347735" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Fields</Category>
+  </Categories>
+</Diagram>
+
