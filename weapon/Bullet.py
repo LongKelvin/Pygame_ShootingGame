@@ -1,4 +1,4 @@
-from settings import *
+from config.Settings import *
 import pygame
 
 
@@ -8,7 +8,6 @@ class Bullet(pygame.sprite.Sprite):
         # self.image = pygame.Surface((10, 20))
         bullet_img = pygame.image.load(path.join(img_dir, "laserRed16.png")).convert()
         self.image = bullet_img
-
         # self.image.fill(YELLOW)
         # self.image.fill(BLACK)
         self.image.set_colorkey(BLACK)

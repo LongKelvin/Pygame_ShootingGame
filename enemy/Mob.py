@@ -1,7 +1,10 @@
 
 import random
-from settings import *
+
 import pygame
+
+from config.Settings import *
+
 
 class Mob(pygame.sprite.Sprite):
     def __init__(self):

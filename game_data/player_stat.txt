@@ -1,0 +1,3 @@
+Kelvin  1250
+John    1500
+James   8000

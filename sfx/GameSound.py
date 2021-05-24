@@ -1,4 +1,6 @@
-from settings import *
+import pygame
+
+from Settings import *
 
 
 class Sound:

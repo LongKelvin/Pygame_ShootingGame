@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#D:/MY_WORKLOAD/PYTHON_WORKLOAD/PYGAME/Pygame_ShootingGame/weapon/Bullet.py</OriginalElement>
+  <nodes>
+    <node x="0.0" y="0.0">weapon.Bullet.Bullet</node>
+  </nodes>
+  <notes />
+  <edges />
+  <settings layout="Hierarchic Group" zoom="1.0" x="86.0" y="71.0" />
+  <SelectedNodes>
+    <node>weapon.Bullet.Bullet</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Inner Classes</Category>
+    <Category>Fields</Category>
+  </Categories>
+</Diagram>
+

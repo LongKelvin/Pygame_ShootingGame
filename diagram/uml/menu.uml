@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>Python</ID>
+  <OriginalElement>#D:/MY_WORKLOAD/PYTHON_WORKLOAD/PYGAME/Pygame_ShootingGame/classes/Menu.py</OriginalElement>
+  <nodes>
+    <node x="0.0" y="346.0">classes.Menu.GameLoad_Menu</node>
+    <node x="234.0" y="280.0">classes.Menu.PauseGameMenu</node>
+    <node x="265.5" y="0.0">classes.Menu.Menu</node>
+    <node x="468.0" y="280.0">classes.Menu.MainMenu</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="classes.Menu.MainMenu" target="classes.Menu.Menu">
+      <point x="0.0" y="-236.0" />
+      <point x="557.5" y="255.0" />
+      <point x="391.33333333333337" y="255.0" />
+      <point x="50.33333333333337" y="115.0" />
+    </edge>
+    <edge source="classes.Menu.PauseGameMenu" target="classes.Menu.Menu">
+      <point x="0.0" y="-236.0" />
+      <point x="0.0" y="115.0" />
+    </edge>
+    <edge source="classes.Menu.GameLoad_Menu" target="classes.Menu.Menu">
+      <point x="0.0" y="-170.0" />
+      <point x="107.0" y="255.0" />
+      <point x="290.66666666666663" y="255.0" />
+      <point x="-50.33333333333334" y="115.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="323.5" y="376.0" />
+  <SelectedNodes>
+    <node>classes.Menu.GameLoad_Menu</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Methods</Category>
+    <Category>Fields</Category>
+  </Categories>
+</Diagram>
+

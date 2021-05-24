@@ -1,5 +1,7 @@
-from settings import *
 import pygame
+
+from config.Settings import *
+
 
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, center, size):
