@@ -31,6 +31,8 @@ GAME_WINNING_TIME = 10000
 
 GAME_DELAY_EVENT = 10000
 
+TIME_FOR_POWERUP = 0.5
+
 FONT_SIZE_LARGE = 60
 FONT_SIZE_MEDIUM = 40
 FONT_SIZE_NORMAL = 32
@@ -42,6 +44,8 @@ abs_folder = path.dirname(path.abspath(__file__))
 img_dir = path.join(path.dirname(abs_folder), 'img')
 snd_dir = path.join(path.dirname(abs_folder), 'snd')
 game_data_dir = path.join(path.dirname(abs_folder), 'game_data')
+player_stat_dir = path.join(path.dirname(abs_folder), 'game_data\player_stat')
+print('player state', player_stat_dir)
 
 print(img_dir)
 
