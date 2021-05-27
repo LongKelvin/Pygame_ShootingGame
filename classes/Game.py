@@ -7,11 +7,10 @@ from classes.Menu import MainMenu, PauseGameMenu, GameLoad_Menu
 
 from classes.TextBox import TextBox
 
-from config.Settings import*
+from config.Settings import *
 from enemy.Mob import Mob
 
 import os
-
 
 from player.Player import Player
 
@@ -37,7 +36,7 @@ class Game:
         self.file_name = 'game_data_.txt'
         self.winning = False
         self.winning_bar = 0
-        self.list_save_data = os.listdir(game_data_dir)
+        self.list_save_data = self.update_list_save_data()
         self.main_menu = MainMenu(self)
         self.game_load_menu = GameLoad_Menu(self)
         self.pause_menu = PauseGameMenu(self)
@@ -129,7 +128,7 @@ class Game:
             random.choice(self.expl_sounds).play()
             expl = Explosion(hit.rect.center, 'lg')
             self.all_sprites.add(expl)
-            if random.random() > 0.3:  # mean that the percent is 9%
+            if random.random() > TIME_FOR_POWERUP:  # mean that the percent is 9%
                 powerUp = PowerUp(hit.rect.center)
                 self.all_sprites.add(powerUp)
                 self.powerups.add(powerUp)
@@ -360,10 +359,11 @@ class Game:
         self.file_data.append(self.player_name)
 
     def update_list_save_data(self):
-        self.list_save_data = os.listdir(game_data_dir)
+        ignored = {"player_stat"}
+        self.list_save_data = [x for x in os.listdir(game_data_dir) if x not in ignored]
+        return self.list_save_data
 
     def get_player_stat(self, filename):
         tempdata = open(path.join(player_stat_dir, filename), 'r')
         data = tempdata.read().splitlines()
         print(data)
-

@@ -136,7 +136,7 @@ class MainMenu(Menu):
                         print("player stats")
                         # self.game.show_input_name(30)
                         self.game.get_player_stat('player_stat.txt')
-                        self.display = False
+
                     elif self.state == 'Option':
                         # self.game.curr_menu = self.game.credits
                         print("game option")
@@ -233,10 +233,15 @@ class GameLoad_Menu(Menu):
                     selected_value = self.state
                     if selected_value - 1 < self.list_len:
                         self.game.load_game_from_file(self.list_data[selected_value - 1])
+                    self.display = False
 
                 if keystate[pygame.K_BACKSPACE]:
                     self.game.current_menu = self.game.main_menu
                     self.display = False
+
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
 
     def events(self):
         self.game.clock.tick(FPS)
