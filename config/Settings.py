@@ -42,6 +42,8 @@ abs_folder = path.dirname(path.abspath(__file__))
 img_dir = path.join(path.dirname(abs_folder), 'img')
 snd_dir = path.join(path.dirname(abs_folder), 'snd')
 game_data_dir = path.join(path.dirname(abs_folder), 'game_data')
+player_stat_dir = path.join(path.dirname(abs_folder), 'game_data\player_stat')
+print('player state', player_stat_dir)
 
 print(img_dir)
 
