@@ -27,6 +27,8 @@ S or K_DOWN to go behind
 A or K_LEFT to turn left
 D or K_RIGHT to turn right
 SPACE to fire
+P to paused
+ESC to exit
 ```
 The more enemy do you shoot, the higher score do you get
 
