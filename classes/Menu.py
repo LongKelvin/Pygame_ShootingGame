@@ -369,6 +369,7 @@ class PauseGameMenu(Menu):
                         self.game.update_list_save_data()
                         print(self.game.file_name)
                         print("save game")
+                        self.game.update_list_save_data()
                         return
 
                     elif self.state == 'Stat':

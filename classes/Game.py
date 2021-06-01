@@ -79,7 +79,7 @@ class Game:
         pygame.mixer.music.set_volume(0.4)
         pygame.mixer.music.play(-1)
 
-    def new(self, player_lives=None, player_score=None, player_shield=None):
+    def new(self, player_lives=None, player_score=None, player_shield=None, player_name=None):
         # start a new game
         self.play_background_music(-1)
         self.score = 0
@@ -93,6 +93,8 @@ class Game:
             self.player.shield = player_shield
         if not player_lives is None:
             self.player.lives = player_lives
+        if not player_name is None:
+            self.player_name = player_name
 
         self.bullets = pygame.sprite.Group()
         self.all_sprites.add(self.player)
@@ -334,7 +336,7 @@ class Game:
         game_data = open(path.join(game_data_dir, filename), 'r')
         data = game_data.read().splitlines()
         print(data)
-        self.new(int(data[0]), int(data[1]), int(data[2]))
+        self.new(int(data[0]), int(data[1]), int(data[2]), data[3])
         self.show_go_screen()
 
     def save_game_data(self, filename, g_data):
