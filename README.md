@@ -3,7 +3,7 @@
 Shoot 'em up is a simple Python Pygame project
 
 ## Installation
-To get started you need Python and Pygame with you can find here: 
+To get started you need Python and Pygame that you can find here: 
 
 [Python](https://www.python.org/downloads/)
 
